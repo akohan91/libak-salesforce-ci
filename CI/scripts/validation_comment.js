@@ -9,11 +9,15 @@ const deploymentValidation = ({
     const componentsFailureMessage = buildComponentsFailureString(
         result.details.componentFailures
     );
+    const coverageWarningsMessage = buildCoverageWarningsString(
+        result.details.runTestResult.codeCoverageWarnings
+    );
 
     return buildMessageString(
         status,
         testFailureMessage,
-        componentsFailureMessage
+        componentsFailureMessage,
+        coverageWarningsMessage
     );
 };
 
@@ -41,7 +45,18 @@ const buildComponentsFailureString = componentFailures => {
     }, '\n')
 }
 
-const buildMessageString = (statusCode, testResultStr, componentsFailureMessage) => {
+const buildCoverageWarningsString = codeCoverageWarnings => {
+    return codeCoverageWarnings && codeCoverageWarnings.length && codeCoverageWarnings.reduce((result, warning) => {
+        result += `
+\t\tName: ${warning.name || 'Overall Code Coverage'}
+\t\t${warning.namespace ? `Namespace: ${warning.namespace}` : ''}
+\t\tMessage: ${warning.message}
+`;
+        return result;
+    }, '\n');
+};
+
+const buildMessageString = (statusCode, testResultStr, componentsFailureMessage, coverageWarningsMessage) => {
     let message = `### ${!statusCode ? '💚' : '💔'} Deployment Validation Results:`;
         message += `\n- **Status**: ${!statusCode && 'Success' || 'Failed'}`;
         message += testResultStr 
@@ -49,6 +64,9 @@ const buildMessageString = (statusCode, testResultStr, componentsFailureMessage)
             : '';
         message += componentsFailureMessage 
             ? '\n- **Component Failures**:' + componentsFailureMessage 
+            : '';
+        message += coverageWarningsMessage
+            ? '\n- **Code Coverage Warnings**:' + coverageWarningsMessage
             : '';
     return message
 }
