@@ -1,1 +1,1 @@
-## ✅ PMD Analysis: No issues found
+## 💚 PMD Analysis: No issues found

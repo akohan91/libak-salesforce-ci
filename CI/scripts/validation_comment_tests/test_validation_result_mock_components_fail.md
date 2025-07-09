@@ -1,6 +1,6 @@
 ### 💔 Deployment Validation Results:
 - **Status**: Failed
-- **Component Failures**:
+- <details><summary><strong>Component Failures</strong></summary>
 
 		Type: ApexClass
 		Name: SomeClass
@@ -11,3 +11,4 @@
 		Name: SomeClass
 		Error: Missing ';' at '}'
 		Line: 4
+</details>

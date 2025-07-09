@@ -1,9 +1,11 @@
-## ⚠️ PMD Analysis: 7 issues found
+## 💔 PMD Analysis: 7 issues found
 
 **Summary:**
 - Total Issues: 7
 - Warnings: 6
 - Notes: 1
+
+<details><summary><strong>Issues list</strong></summary>
 
 ### 📄 demo-app/main/default/classes/RestLogger.cls
 
@@ -66,4 +68,7 @@ Empty block statements serve no purpose and should be removed.
 Empty block statements serve no purpose and should be removed.
 </details>
 
+
+
+</details>
 

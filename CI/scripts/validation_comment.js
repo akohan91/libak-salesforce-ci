@@ -57,16 +57,16 @@ const buildCoverageWarningsString = codeCoverageWarnings => {
 };
 
 const buildMessageString = (statusCode, testResultStr, componentsFailureMessage, coverageWarningsMessage) => {
-    let message = `### ${!statusCode ? '💚' : '💔'} Deployment Validation Results:`;
+    let message = `## ${!statusCode ? '💚' : '💔'} Deployment Validation Results:`;
         message += `\n- **Status**: ${!statusCode && 'Success' || 'Failed'}`;
         message += testResultStr 
-            ? '\n- **Test Failures**:' + testResultStr 
+            ? `\n- <details><summary><strong>Test Failures</strong></summary>${testResultStr}</details>`
             : '';
         message += componentsFailureMessage 
-            ? '\n- **Component Failures**:' + componentsFailureMessage 
+            ? `\n- <details><summary><strong>Component Failures</strong></summary>${componentsFailureMessage}</details>`
             : '';
         message += coverageWarningsMessage
-            ? '\n- **Code Coverage Warnings**:' + coverageWarningsMessage
+            ? `\n- <details><summary><strong>Code Coverage Warnings</strong></summary>${coverageWarningsMessage}</details>`
             : '';
     return message
 }

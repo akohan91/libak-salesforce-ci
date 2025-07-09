@@ -4,7 +4,7 @@ const pmdValidation = (pmdResults) => {
 		const results = getResults(report);
 		
 		if (results?.length === 0) {
-			return '## ✅ PMD Analysis: No issues found';
+			return '## 💚 PMD Analysis: No issues found';
 		}
 
 		const violationsByFile = groupViolationsByFile(results);
@@ -13,12 +13,11 @@ const pmdValidation = (pmdResults) => {
 		// Generate the message
 		let message = generateHeader(results);
 		message += generateSummary(results);
-		message += generateFileDetails(violationsByFile, rulesMap);
-
+		message += `<details><summary><strong>Issues list</strong></summary>\n\n${generateFileDetails(violationsByFile, rulesMap)}\n</details>\n\n`;
 		return message;
 	} catch (error) {
 		console.log(error);
-		return `## ⚠️ Error parsing PMD results: ${error.message}`;
+		return `## 💔 Error parsing PMD results: ${error.message}`;
 	}
 };
 
@@ -69,7 +68,7 @@ const extractRulesMap = (report) => {
 };
 
 const generateHeader = (results) => {
-	return `## ${results.length > 0 ? '⚠️' : '✅'} PMD Analysis: ${results.length} issue${results.length === 1 ? '' : 's'} found\n\n`;
+	return `## ${results.length > 0 ? '💔' : '💚'} PMD Analysis: ${results.length} issue${results.length === 1 ? '' : 's'} found\n\n`;
 };
 
 const generateSummary = (results) => {
