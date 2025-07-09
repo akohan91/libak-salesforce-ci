@@ -1,0 +1,67 @@
+name: Salesforce PMD Analysis
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  workflow_call:
+    inputs:
+      source-path:
+        description: 'Path to source code to analyze'
+        required: false
+        default: 'force-app/main/default'
+        type: string
+      ruleset-path:
+        description: 'Path to PMD ruleset XML'
+        required: false
+        default: './libak-salesforce-ci/rulesets/apex/pmd_rule_set.xml'
+        type: string
+
+jobs:
+  pmd-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        
+      # Check out the reusable workflow's repository
+      - name: Check out reusable workflow repository
+        uses: actions/checkout@v4
+        with:
+          repository: akohan91/libak-salesforce-ci
+          ref: main
+          path: ./libak-salesforce-ci
+
+      - name: Run PMD analysis
+        id: pmd
+        uses: pmd/pmd-github-action@v2
+        with:
+          rulesets: '${{ inputs.ruleset-path }}'
+          analyzeModifiedFilesOnly: false
+          sourcePath: '${{ inputs.source-path }}'
+
+      - name: Check for violations
+        id: check-violations
+        run: |
+          if [ -f "pmd-report.sarif" ] && [ -s "pmd-report.sarif" ]; then
+            echo "Violations found"
+            echo "has-violations=true" >> $GITHUB_OUTPUT
+          else
+            echo "No violations found"
+            echo "has-violations=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Post Comment on PR
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const pmdResult = JSON.parse(fs.readFileSync('./pmd-report.sarif', 'utf8'));
+
+            const message = require('./libak-salesforce-ci/CI/scripts/pmd_comment.js')(pmdResult);
+
+            await github.rest.issues.createComment({
+              ...context.repo,
+              issue_number: context.payload.pull_request?.number,
+              body: message
+            });
