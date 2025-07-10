@@ -1,4 +1,4 @@
-### 💔 Deployment Validation Results:
+## 💔 Deployment Validation Results:
 - **Status**: Failed
 - <details><summary><strong>Code Coverage Warnings</strong></summary>
 

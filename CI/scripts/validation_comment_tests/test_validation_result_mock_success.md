@@ -1,2 +1,2 @@
-### 💚 Deployment Validation Results:
+## 💚 Deployment Validation Results:
 - **Status**: Success
