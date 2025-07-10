@@ -39,6 +39,7 @@ jobs:
         with:
           rulesets: '${{ inputs.ruleset-path }}'
           analyzeModifiedFilesOnly: false
+          createGitHubAnnotations: false
           sourcePath: '${{ inputs.source-path }}'
 
       - name: Check for violations
