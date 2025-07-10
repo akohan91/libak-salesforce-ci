@@ -38,7 +38,7 @@ jobs:
         uses: pmd/pmd-github-action@v2
         with:
           rulesets: '${{ inputs.ruleset-path }}'
-          analyzeModifiedFilesOnly: false
+          analyzeModifiedFilesOnly: true
           createGitHubAnnotations: false
           sourcePath: '${{ inputs.source-path }}'
 
