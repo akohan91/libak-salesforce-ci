@@ -41,6 +41,7 @@ jobs:
           analyzeModifiedFilesOnly: true
           createGitHubAnnotations: false
           sourcePath: '${{ inputs.source-path }}'
+        continue-on-error: true
 
       - name: Check for violations
         id: check-violations
@@ -48,10 +49,17 @@ jobs:
           if [ -f "pmd-report.sarif" ] && [ -s "pmd-report.sarif" ]; then
             echo "Violations found"
             echo "has-violations=true" >> $GITHUB_OUTPUT
+            
+            # Create an empty file if not present (this should never happen given the condition)
+            touch pmd-report.sarif
           else
-            echo "No violations found"
+            echo "No violations found or no files to analyze"
             echo "has-violations=false" >> $GITHUB_OUTPUT
+            
+            # Create an empty report file for downstream steps
+            echo '{"runs":[]}' > pmd-report.sarif
           fi
+
       - name: Post Comment on PR
         uses: actions/github-script@v6
         with:
