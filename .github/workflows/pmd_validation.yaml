@@ -17,6 +17,16 @@ on:
         required: false
         default: './libak-salesforce-ci/rulesets/apex/pmd_rule_set.xml'
         type: string
+      analyze-modified-files-only:
+        description: 'Only analyze modified files'
+        required: false
+        default: true
+        type: boolean
+      create-github-annotations:
+        description: 'Create GitHub annotations for violations'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   pmd-analysis:
@@ -38,8 +48,8 @@ jobs:
         uses: pmd/pmd-github-action@v2
         with:
           rulesets: '${{ inputs.ruleset-path }}'
-          analyzeModifiedFilesOnly: true
-          createGitHubAnnotations: false
+          analyzeModifiedFilesOnly: ${{ inputs.analyze-modified-files-only }}
+          createGitHubAnnotations: ${{ inputs.create-github-annotations }}
           sourcePath: '${{ inputs.source-path }}'
         continue-on-error: true
 
